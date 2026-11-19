@@ -1,60 +1,37 @@
 import java.util.*;
-
 public class DuplicateAttendance {
-    public static void main(String args[]) {
+    public static void main (String args[]) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number of students: ");
         int n = sc.nextInt();
 
         int[] rolls = new int[n];
-
+        
         for (int i = 0; i < rolls.length; i++) {
             System.out.println("Enter roll number " + (i + 1) + ": ");
             rolls[i] = sc.nextInt();
         }
+
+        HashMap<Integer, Integer>  frequency = new HashMap<>();
 
         int distinct = 0;
         int repeats = 0;
         int firstRepeat = -1;
 
         for (int i = 0; i < rolls.length; i++) {
-            int currentRoll = rolls[i];
+            int roll = rolls[i];
 
-            // Count how many times currentRoll appears in the array
-            int count = 0;
-            for (int j = 0; j < rolls.length; j++) {
-                if (rolls[j] == currentRoll) {
-                    count++;
-                }
-            }
+            int count = frequency.getOrDefault(roll, 0) + 1;
+            frequency.put(roll, count);
 
-            // Check if this is the first time we are seeing currentRoll
-            boolean seenBefore = false;
-            for (int k = 0; k < i; k++) {
-                if (rolls[k] == currentRoll) {
-                    seenBefore = true;
-                    break;
-                }
-            }
-
-            if (!seenBefore) {
+            if (count == 1) {
                 distinct++;
-                if (count > 1) {
-                    repeats++;
-                }
-            }
+            } else if (count == 2) {
+                repeats++;
 
-            // Check if this roll number appeared earlier in the array
-            boolean appearedEarlier = false;
-            for (int k = 0; k < i; k++) {
-                if (rolls[k] == currentRoll) {
-                    appearedEarlier = true;
-                    break;
+                if (firstRepeat == -1) {
+                    firstRepeat = roll;
                 }
-            }
-
-            if (appearedEarlier && firstRepeat == -1) {
-                firstRepeat = currentRoll;
             }
         }
 
@@ -64,5 +41,7 @@ public class DuplicateAttendance {
         System.out.println("First repeated roll number: " + firstRepeat);
 
         sc.close();
+
+
     }
 }
